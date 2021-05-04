@@ -1,0 +1,274 @@
+TITLE 'High LDL Trained and Untrained Model Synthesis'
+COORDINATES
+	Cartesian1
+VARIABLES
+l (threshold=0.001), a (threshold=0.001), c (threshold=0.001), m (threshold=0.001), f (threshold=0.001)
+SELECT
+ERRLIM=1e-3
+threads=1
+DEFINITIONS
+	
+    {Dl and Da from rescaled experimental values,
+    Dc assumed same as Da,
+    Dm assumed many orders smaller than Dl}
+    Dl = 1.2e2
+    Da = 5.4e3
+    Dc = 5.4e3
+    Dm = 1.0e-2
+    
+    {decay taken to be much smaller than other terms,
+    values scaled to time,
+    d_m assumed orders smaller than others}
+    !less decay than in Chalmers
+    d_l = 5.0e-1
+    d_a = 5.0e-1
+    d_c = 5.0e-1
+    d_m = 5.0e-3
+    
+    {Mu_l replaced by E_i rescalar, 
+    Mu_a, Mu_c, Mu_f rescaled to time and E_i}
+    Mu_a = 4.0e1 !chemoattractants per macrophage
+    Mu_c = 4.0e1 !cytokines per macrophage
+    Mu_f = 4.1e-2 !ldl to foam cell designation !og time rescale: 4.1e-2
+    
+    {All rescaled to time}
+    Sigma_a1 = 5.0e2
+    Sigma_a2 = 5.0e1
+    Sigma_c = 5.0e2
+    Xm = 5.0e-3
+    
+   {Constants with no time dependence}
+    A0 = 1.0e-1
+    C0 = 1.0e-2
+    Beta_a = 1.0e0
+    
+    {Parameters rescaled to time}
+    Sigma_l = 1.0e1			!og time rescale: 1.0e1
+    Sigma_m = 4.0e-5		!og time rescale: 2.6e-6 - 4.1e-6 
+    {2.0e-5 low, 3.0e-5, 4.1e-5, 9.0e-5, 2.0e-4 high}
+    
+    {Epigenetic training modifiers}
+    E_a = 3
+    E_c = 4
+    
+    !Untrained model result imports
+    l1 = table("+Untrained Source Model_output/l(0)_+UH6Sigmam_1")
+    l2 = table("+Untrained Source Model_output/l(0)_+UH6Sigmam_2")
+    l3 = table("+Untrained Source Model_output/l(0)_+UH6Sigmam_3")
+    l4 = table("+Untrained Source Model_output/l(0)_+UH6Sigmam_4")
+    a1 = table("+Untrained Source Model_output/a(0)_+UH6Sigmam_1")
+    a2 = table("+Untrained Source Model_output/a(0)_+UH6Sigmam_2")
+    a3 = table("+Untrained Source Model_output/a(0)_+UH6Sigmam_3")
+    a4 = table("+Untrained Source Model_output/a(0)_+UH6Sigmam_4")
+    c1 = table("+Untrained Source Model_output/c(0)_+UH6Sigmam_1")
+    c2 = table("+Untrained Source Model_output/c(0)_+UH6Sigmam_2")
+    c3 = table("+Untrained Source Model_output/c(0)_+UH6Sigmam_3")
+    c4 = table("+Untrained Source Model_output/c(0)_+UH6Sigmam_4")
+    m1 = table("+Untrained Source Model_output/int(m)_+UH6Sigmam_1")
+    m2 = table("+Untrained Source Model_output/int(m)_+UH6Sigmam_2")
+    m3 = table("+Untrained Source Model_output/int(m)_+UH6Sigmam_3")
+    m4 = table("+Untrained Source Model_output/int(m)_+UH6Sigmam_4")
+    f1 = table("+Untrained Source Model_output/int(f)_+UH6Sigmam_1")
+	f2 = table("+Untrained Source Model_output/int(f)_+UH6Sigmam_2")
+    f3 = table("+Untrained Source Model_output/int(f)_+UH6Sigmam_3")
+    f4 = table("+Untrained Source Model_output/int(f)_+UH6Sigmam_4")
+    
+    !Trained model result imports
+    Tl1 = table("+Trained Source Model_output/l(0)_+TH6Sigmam_1")
+    Tl2 = table("+Trained Source Model_output/l(0)_+TH6Sigmam_2")
+    Tl3 = table("+Trained Source Model_output/l(0)_+TH6Sigmam_3")
+    Tl4 = table("+Trained Source Model_output/l(0)_+TH6Sigmam_4")
+    Ta1 = table("+Trained Source Model_output/a(0)_+TH6Sigmam_1")
+    Ta2 = table("+Trained Source Model_output/a(0)_+TH6Sigmam_2")
+    Ta3 = table("+Trained Source Model_output/a(0)_+TH6Sigmam_3")
+    Ta4 = table("+Trained Source Model_output/a(0)_+TH6Sigmam_4")
+    Tc1 = table("+Trained Source Model_output/c(0)_+TH6Sigmam_1")
+    Tc2 = table("+Trained Source Model_output/c(0)_+TH6Sigmam_2")
+    Tc3 = table("+Trained Source Model_output/c(0)_+TH6Sigmam_3")
+    Tc4 = table("+Trained Source Model_output/c(0)_+TH6Sigmam_4")
+    Tm1 = table("+Trained Source Model_output/int(m)_+TH6Sigmam_1")
+    Tm2 = table("+Trained Source Model_output/int(m)_+TH6Sigmam_2")
+    Tm3 = table("+Trained Source Model_output/int(m)_+TH6Sigmam_3")
+    Tm4 = table("+Trained Source Model_output/int(m)_+TH6Sigmam_4")
+    Tf1 = table("+Trained Source Model_output/int(f)_+TH6Sigmam_1")
+    Tf2 = table("+Trained Source Model_output/int(f)_+TH6Sigmam_2")
+    Tf3 = table("+Trained Source Model_output/int(f)_+TH6Sigmam_3")
+    Tf4 = table("+Trained Source Model_output/int(f)_+TH6Sigmam_4")
+    
+    Sigmam1 = 1.0e-6	{Sigmam}
+    Sigmam2 = 4.0e-6
+    Sigmam3 = 7.0e-6
+    Sigmam4 = 1.0e-5
+    
+    E_e = 1
+    E_i = 116.28 * (ln(l1 + 11.3) - 1.4)
+    E_i1 = 116.28 * (ln(l1 + 11.3) - 1.4)
+    E_i2 = 116.28 * (ln(l2 + 11.3) - 1.4)
+    E_i3 = 116.28 * (ln(l3 + 11.3) - 1.4)
+    E_i4 = 116.28 * (ln(l4 + 11.3) - 1.4)
+    TE_i1 = 116.28 * (ln(Tl1 + 7.6) - 1.1)
+    TE_i2 = 116.28 * (ln(Tl2 + 7.6) - 1.1)
+    TE_i3 = 116.28 * (ln(Tl3 + 7.6) - 1.1)
+    TE_i4 = 116.28 * (ln(Tl4 + 7.6) - 1.1)
+    
+    Influx = m * l * E_i  / (1.0 + l)
+    Efflux = m * l * E_e / (1.0 + l)
+    
+    ldlc = l * m* E_i /(1.0+ l)
+    
+    ldlc1 = l1*m1* E_i1/(1.0+l1)
+    ldlc2 = l2*m2* E_i2/(1.0+l2)
+    ldlc3 = l3*m3* E_i3/(1.0+l3)
+    ldlc4 = l4*m4 * E_i4/(1.0+l4)
+    Tldlc1 = Tl1*Tm1* TE_i1/(1.0+Tl1)
+    Tldlc2 = Tl2*Tm2* TE_i2/(1.0+Tl2)
+    Tldlc3 = Tl3*Tm3* TE_i3/(1.0+Tl3)
+    Tldlc4 = Tl4*Tm4* TE_i4/(1.0+Tl4)
+    
+    mm = if (a < A0) then 0 else Sigma_m*(1.0+C0*c)*(a-A0)
+    mm1 = if (a1 < A0) then 0 else Sigmam1*(1.0+C0*c1)*(a1-A0)
+    mm2 = if (a2 < A0) then 0 else Sigmam2*(1.0+C0*c2)*(a2-A0)
+    mm3 = if (a3 < A0) then 0 else Sigmam3*(1.0+C0*c3)*(a3-A0)
+    mm4 = if (a4 < A0) then 0 else Sigmam4*(1.0+C0*c4)*(a4-A0)
+    Tmm1 = if (Ta1 < A0) then 0 else Sigmam1*(1.0+C0*Tc1)*(Ta1-A0)
+    Tmm2 = if (Ta2 < A0) then 0 else Sigmam2*(1.0+C0*Tc2)*(Ta2-A0)
+    Tmm3 = if (Ta3 < A0) then 0 else Sigmam3*(1.0+C0*Tc3)*(Ta3-A0)
+    Tmm4 = if (Ta4 < A0) then 0 else Sigmam4*(1.0+C0*Tc4)*(Ta4-A0)
+
+EQUATIONS
+	a:		Da*del2(a) = -E_a * Mu_a * Influx + d_a * a {decay} + dt(a)
+
+	c:		Dc*del2(c) = -E_c * Mu_c * Influx + d_c * c {decay} + dt(c)
+	
+	l:		Dl*del2(l) = Influx {consumption} + d_l * l {decay} + dt(l)
+	
+	m:	Dm*del2(m) = Xm * div(m * grad(l)) {chemotaxis} + dt(f) {conversion} + d_m * m {dedifferentiation} + dt(m)
+    
+    f:		dt(f) = Mu_f  * (Influx {influx} -  Efflux) {efflux}
+
+BOUNDARIES
+	REGION 1
+        START(0)
+			POINT LOAD(a) = Sigma_a1 * l / (Beta_a + l) + Sigma_a2 * c
+			POINT LOAD(c) = -Sigma_c * c
+			POINT LOAD(l) = Sigma_l
+			POINT LOAD(m) = IF (a < A0) THEN 0 ELSE Sigma_m * (1.0 + C0 * c) * (a - A0)
+			POINT LOAD(f) = 0
+		LINE TO(1)
+			POINT LOAD(a)=0
+			POINT LOAD(c)=0
+			POINT LOAD(l)=0
+			POINT LOAD(m)=0
+			POINT LOAD(f)=0
+
+TIME 0 TO 30
+plots
+	FOR T=0 BY 30 TO 30
+    
+histories
+    history(l1, l2, l3, l4) at (0) as "OxLDL at Endothelial Boundary" range(0, 80) PNG(1024, 2)
+    history(Tl1, Tl2, Tl3, Tl4) at (0) as "OxLDL at Endothelial Boundary" range (0, 80) PNG(1024, 2)
+	history(a1, a2, a3, a4) at (0) as "Chemoattractants at Endothelial Boundary "	range (0, 24000) PNG(1024, 2)
+    history(Ta1, Ta2, Ta3, Ta4) at (0) as "Chemoattractants at Endotheilal Boundary" range (0, 24000) PNG(1024, 2)
+    history(c1, c2, c3, c4) at (0) as "Cytokines at Endothelial Boundary" range (0, 1300) PNG(1024, 2)											
+    history(Tc1, Tc2, Tc3, Tc4) at (0) as "Cytokines at Endotheial Boundary" range (0, 1300) PNG(1024, 2)
+    history(integral(ldlc1), integral(ldlc2), integral(ldlc3), integral(ldlc4)) as "Rate of OxLDL Consumption" range (0, 210) PNG(1024, 2)
+    history(integral(Tldlc1), integral(Tldlc2), integral(Tldlc3), integral(Tldlc4)) as "Rate of OxLDL Consumption" range (0, 210) PNG(1024, 2)
+    history(mm1, mm2, mm3, mm4) at (0) as "Monocyte Migration" range(0, 3.2) PNG(1024, 2)
+    history(Tmm1, Tmm2, Tmm3, Tmm4) at (0) as "Monocyte Migration" range(0, 3.2) PNG(1024, 2)
+	history(m1, m2, m3, m4) as "Total Intimal Macrophages" range (0, 48) PNG(1024, 2)
+    history(Tm1, Tm2, Tm3, Tm4) as "Total Intimal Macrophages" range (0,48) PNG(1024, 2)
+	history(f1, f2, f3, f4) as "Total Intimal Foam Cells" range (0,6.2) PNG(1024, 2)
+    history(Tf1, Tf2, Tf3, Tf4) at (0) as "Total Intimal Foam Cells" range (0,6.2) PNG(1024, 2)
+   
+END
+
+	V1
+    !Untrained model result imports
+    l1 = table("Untrained Source Model_output/l(0)_UHSigmam_1")
+    l2 = table("Untrained Source Model_output/l(0)_UHSigmam_2")
+    l3 = table("Untrained Source Model_output/l(0)_UHSigmam_3")
+    l4 = table("Untrained Source Model_output/l(0)_UHSigmam_4")
+    a1 = table("Untrained Source Model_output/a(0)_UHSigmam_1")
+    a2 = table("Untrained Source Model_output/a(0)_UHSigmam_2")
+    a3 = table("Untrained Source Model_output/a(0)_UHSigmam_3")
+    a4 = table("Untrained Source Model_output/a(0)_UHSigmam_4")
+    c1 = table("Untrained Source Model_output/k(0)_UHSigmam_1")
+    c2 = table("Untrained Source Model_output/k(0)_UHSigmam_2")
+    c3 = table("Untrained Source Model_output/k(0)_UHSigmam_3")
+    c4 = table("Untrained Source Model_output/k(0)_UHSigmam_4")
+    m1 = table("Untrained Source Model_output/int(m)_UHSigmam_1")
+    m2 = table("Untrained Source Model_output/int(m)_UHSigmam_2")
+    m3 = table("Untrained Source Model_output/int(m)_UHSigmam_3")
+    m4 = table("Untrained Source Model_output/int(m)_UHSigmam_4")
+    f1 = table("Untrained Source Model_output/int(f)_UHSigmam_1")
+	f2 = table("Untrained Source Model_output/int(f)_UHSigmam_2")
+    f3 = table("Untrained Source Model_output/int(f)_UHSigmam_3")
+    f4 = table("Untrained Source Model_output/int(f)_UHSigmam_4")
+    
+    !Trained model result imports
+    Tl1 = table("Trained Source Model_output/l(0)_THSigmam_1")
+    Tl2 = table("Trained Source Model_output/l(0)_THSigmam_2")
+    Tl3 = table("Trained Source Model_output/l(0)_THSigmam_3")
+    Tl4 = table("Trained Source Model_output/l(0)_THSigmam_4")
+    Ta1 = table("Trained Source Model_output/a(0)_THSigmam_1")
+    Ta2 = table("Trained Source Model_output/a(0)_THSigmam_2")
+    Ta3 = table("Trained Source Model_output/a(0)_THSigmam_3")
+    Ta4 = table("Trained Source Model_output/a(0)_THSigmam_4")
+    Tc1 = table("Trained Source Model_output/k(0)_THSigmam_1")
+    Tc2 = table("Trained Source Model_output/k(0)_THSigmam_2")
+    Tc3 = table("Trained Source Model_output/k(0)_THSigmam_3")
+    Tc4 = table("Trained Source Model_output/k(0)_THSigmam_4")
+    Tm1 = table("Trained Source Model_output/int(m)_THSigmam_1")
+    Tm2 = table("Trained Source Model_output/int(m)_THSigmam_2")
+    Tm3 = table("Trained Source Model_output/int(m)_THSigmam_3")
+    Tm4 = table("Trained Source Model_output/int(m)_THSigmam_4")
+    Tf1 = table("Trained Source Model_output/int(f)_THSigmam_1")
+    Tf2 = table("Trained Source Model_output/int(f)_THSigmam_2")
+    Tf3 = table("Trained Source Model_output/int(f)_THSigmam_3")
+    Tf4 = table("Trained Source Model_output/int(f)_THSigmam_4")
+    
+    V4
+    !Untrained model result imports
+    l1 = table("Untrained Source Model_output/l(0)_UH4Sigmam_1")
+    l2 = table("Untrained Source Model_output/l(0)_UH4Sigmam_2")
+    l3 = table("Untrained Source Model_output/l(0)_UH4Sigmam_3")
+    l4 = table("Untrained Source Model_output/l(0)_UH4Sigmam_4")
+    a1 = table("Untrained Source Model_output/a(0)_UH4Sigmam_1")
+    a2 = table("Untrained Source Model_output/a(0)_UH4Sigmam_2")
+    a3 = table("Untrained Source Model_output/a(0)_UH4Sigmam_3")
+    a4 = table("Untrained Source Model_output/a(0)_UH4Sigmam_4")
+    c1 = table("Untrained Source Model_output/c(0)_UH4Sigmam_1")
+    c2 = table("Untrained Source Model_output/c(0)_UH4Sigmam_2")
+    c3 = table("Untrained Source Model_output/c(0)_UH4Sigmam_3")
+    c4 = table("Untrained Source Model_output/c(0)_UH4Sigmam_4")
+    m1 = table("Untrained Source Model_output/int(m)_UH4Sigmam_1")
+    m2 = table("Untrained Source Model_output/int(m)_UH4Sigmam_2")
+    m3 = table("Untrained Source Model_output/int(m)_UH4Sigmam_3")
+    m4 = table("Untrained Source Model_output/int(m)_UH4Sigmam_4")
+    f1 = table("Untrained Source Model_output/int(f)_UH4Sigmam_1")
+	f2 = table("Untrained Source Model_output/int(f)_UH4Sigmam_2")
+    f3 = table("Untrained Source Model_output/int(f)_UH4Sigmam_3")
+    f4 = table("Untrained Source Model_output/int(f)_UH4Sigmam_4")
+    
+    !Trained model result imports
+    Tl1 = table("Trained Source Model_output/l(0)_TH4Sigmam_1")
+    Tl2 = table("Trained Source Model_output/l(0)_TH4Sigmam_2")
+    Tl3 = table("Trained Source Model_output/l(0)_TH4Sigmam_3")
+    Tl4 = table("Trained Source Model_output/l(0)_TH4Sigmam_4")
+    Ta1 = table("Trained Source Model_output/a(0)_TH4Sigmam_1")
+    Ta2 = table("Trained Source Model_output/a(0)_TH4Sigmam_2")
+    Ta3 = table("Trained Source Model_output/a(0)_TH4Sigmam_3")
+    Ta4 = table("Trained Source Model_output/a(0)_TH4Sigmam_4")
+    Tc1 = table("Trained Source Model_output/c(0)_TH4Sigmam_1")
+    Tc2 = table("Trained Source Model_output/c(0)_TH4Sigmam_2")
+    Tc3 = table("Trained Source Model_output/c(0)_TH4Sigmam_3")
+    Tc4 = table("Trained Source Model_output/c(0)_TH4Sigmam_4")
+    Tm1 = table("Trained Source Model_output/int(m)_TH4Sigmam_1")
+    Tm2 = table("Trained Source Model_output/int(m)_TH4Sigmam_2")
+    Tm3 = table("Trained Source Model_output/int(m)_TH4Sigmam_3")
+    Tm4 = table("Trained Source Model_output/int(m)_TH4Sigmam_4")
+    Tf1 = table("Trained Source Model_output/int(f)_TH4Sigmam_1")
+    Tf2 = table("Trained Source Model_output/int(f)_TH4Sigmam_2")
+    Tf3 = table("Trained Source Model_output/int(f)_TH4Sigmam_3")
+    Tf4 = table("Trained Source Model_output/int(f)_TH4Sigmam_4")
