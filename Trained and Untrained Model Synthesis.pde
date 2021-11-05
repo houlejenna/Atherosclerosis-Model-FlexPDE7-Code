@@ -35,7 +35,7 @@ DEFINITIONS
     m3 = table("Untrained Source Model_output/int(m)_USigmam_3")
     m4 = table("Untrained Source Model_output/int(m)_USigmam_4")
     f1 = table("Untrained Source Model_output/int(f)_USigmam_1")
-	f2 = table("Untrained Source Model_output/int(f)_USigmam_2")
+    f2 = table("Untrained Source Model_output/int(f)_USigmam_2")
     f3 = table("Untrained Source Model_output/int(f)_USigmam_3")
     f4 = table("Untrained Source Model_output/int(f)_USigmam_4")
     
@@ -93,7 +93,7 @@ DEFINITIONS
     C0 = 1.0e-2
     Beta_a = 1.0e0
     
-	!Rate of LDL and monocyte entry to the intima
+    !Rate of LDL and monocyte entry to the intima
     Sigma_l = 1.0e1
     Sigma_m = 2.0e-5 !2.0e-5 low, 3.0e-5, 4.1e-5, 9.0e-5, 2.0e-4 high
     
@@ -155,9 +155,9 @@ EQUATIONS
 	
 	l:		Dl*del2(l) = Influx {consumption} + d_l * l {decay} + dt(l)
 	
-	m:	Dm*del2(m) = Xm * div(m * grad(l)) {chemotaxis} + dt(f) {conversion} + d_m * m {dedifferentiation} + dt(m)
+	m:		Dm*del2(m) = Xm * div(m * grad(l)) {chemotaxis} + dt(f) {conversion} + d_m * m {dedifferentiation} + dt(m)
     
-    f:		dt(f) = Mu_f  * (Influx {influx} -  Efflux) {efflux}
+    	f:		dt(f) = Mu_f  * (Influx {influx} -  Efflux) {efflux}
 
 BOUNDARIES
 	REGION 1
@@ -167,7 +167,7 @@ BOUNDARIES
 			POINT LOAD(l) = Sigma_l
 			POINT LOAD(m) = IF (a < A0) THEN 0 ELSE Sigma_m * (1.0 + C0 * c) * (a - A0)
 			POINT LOAD(f) = 0
-		LINE TO(1)
+	LINE TO(1)
 			POINT LOAD(a)=0
 			POINT LOAD(c)=0
 			POINT LOAD(l)=0
@@ -182,9 +182,9 @@ plots
 histories
 !Compound plots for oxLDL concentration, chemoattractant concentration, cytokine concentration, total intimal macrophage content, total intimal foam cell content 
 !history(x1, x2, x3, x4)=plot of x species in untrained macrophages at sigma m 1-4, as " ": plot titles, range(0, #): range y axis, PNG (1024, 2): save plot PNG 1024 pixels
-	history(l1, l2, l3, l4) at (0) as "OxLDL at Endothelial Boundary" range(0, 20) PNG (1024, 2)
+    history(l1, l2, l3, l4) at (0) as "OxLDL at Endothelial Boundary" range(0, 20) PNG (1024, 2)
     history(Tl1, Tl2, Tl3, Tl4) at (0) as "OxLDL at Endothelial Boundary" range (0, 20) PNG (1024, 2)
-	history(a1, a2, a3, a4) at (0) as "Chemoattractants at Endothelial Boundary "	range (0, 6000) PNG (1024, 2)
+    history(a1, a2, a3, a4) at (0) as "Chemoattractants at Endothelial Boundary "	range (0, 6000) PNG (1024, 2)
     history(Ta1, Ta2, Ta3, Ta4) at (0) as "Chemoattractants at Endotheilal Boundary" range (0, 6000) PNG (1024, 2)
     history(c1, c2, c3, c4) at (0) as "Cytokines at Endothelial Boundary" range (0,325) PNG (1024, 2)										
     history(Tc1, Tc2, Tc3, Tc4) at (0) as "Cytokines at Endotheial Boundary" range (0,325) PNG (1024, 2)
@@ -192,12 +192,9 @@ histories
     history(integral(Tldlc1), integral(Tldlc2), integral(Tldlc3), integral(Tldlc4)) as "Rate of OxLDL Consumption" range (0, 17) PNG (1024, 2)
     history(mm1, mm2, mm3, mm4) at (0) as "Monocyte Migration" range(0, 25e-2) PNG (1024, 2)
     history(Tmm1, Tmm2, Tmm3, Tmm4) at (0) as "Monocyte Migration" range(0, 25e-2) PNG (1024, 2)
-	history(integral(m1), integral(m2), integral(m3), integral(m4)) as "Total Intimal Macrophages" range (0,3.3) PNG (1024, 2)
+    history(integral(m1), integral(m2), integral(m3), integral(m4)) as "Total Intimal Macrophages" range (0,3.3) PNG (1024, 2)
     history(integral(Tm1), integral(Tm2), integral(Tm3), integral(Tm4)) as "Total Intimal Macrophages" range (0,3.3) PNG (1024, 2)
-	history(f1, f2, f3, f4) as "Total Intimal Foam Cells" range (0,1.8) PNG (1024, 2)
+    history(f1, f2, f3, f4) as "Total Intimal Foam Cells" range (0,1.8) PNG (1024, 2)
     history(Tf1, Tf2, Tf3, Tf4) at (0) as "Total Intimal Foam Cells" range (0,1.8) PNG (1024, 2)
 
 END
-
-
-
