@@ -13,8 +13,8 @@ ERRLIM=1e-3
 threads=1
 DEFINITIONS
 	
-  	!Diffusion constants; Dl and Da from rescaled experimental values, Dc assumed same as Da, Dm assumed many orders smaller than Dl
-    Dl = 5.2e1			!5.2e1, from Dabagh rescaled to 24 hr time and space according to Chalmers
+    !Diffusion constants; Dl and Da from rescaled experimental values, Dc assumed same as Da, Dm assumed many orders smaller than Dl
+    Dl = 5.2e1		!5.2e1, from Dabagh rescaled to 24 hr time and space according to Chalmers
     Da = 5.4e3		!5.4e3, from Paavola rescaled to 24 hr time and space according to Chalmers
     Dc = 5.4e3		!5.4e3, assumed the same as Da 
     Dm = 5.2e-3 	!4 orders of magnitude smaller than Dl, same rescale as Chalmers 
@@ -41,8 +41,8 @@ DEFINITIONS
     C0 = 1.0e-2 
     Beta_a = 1.0e0
     
-	!Rate of LDL and monocyte entry to the intima
-    Sigma_l = 1.0e1 		!Low LDL: 1.0e1, high LDL: 4.0e1
+    !Rate of LDL and monocyte entry to the intima
+    Sigma_l = 1.0e1 	!Low LDL: 1.0e1, high LDL: 4.0e1
     Sigma_m = 1.0e-6 	!Range: (low) 1.0e-6, 4.0e-6, 7.0e-6, 1.0e-5 (high)
     
     !Epigenetic training modifiers; E_a=chemoattractant production rescalar, E_c=cytokine production rescalar
@@ -62,9 +62,9 @@ EQUATIONS
     
     a:		Da*del2(a) {diffusion from lumen} = -E_a  * Mu_a * Influx {consumption} + d_a * a {decay} + dt(a) {PDE of a with respect to time}
 
-	c:		Dc*del2(c) {diffusion from lumen} = -E_c * Mu_c * Influx {consumption} + d_c * c {decay} + dt(c) {PDE of c with respect to time}
+    c:		Dc*del2(c) {diffusion from lumen} = -E_c * Mu_c * Influx {consumption} + d_c * c {decay} + dt(c) {PDE of c with respect to time}
 	
-	m:	Dm*del2(m) {diffusion from lumen} = Xm * div(m * grad(l)) {chemotaxis} + dt(f) {conversion} + d_m * m {dedifferentiation} + dt(m) {PDE of m with respect to time}
+    m:		Dm*del2(m) {diffusion from lumen} = Xm * div(m * grad(l)) {chemotaxis} + dt(f) {conversion} + d_m * m {dedifferentiation} + dt(m) {PDE of m with respect to time}
     
     f:		dt(f) {PDE of f with respect to time} = Mu_f  * (Influx - Efflux)
 
@@ -78,7 +78,7 @@ BOUNDARIES
 			POINT LOAD(l) = Sigma_l
 			POINT LOAD(m) = IF (a < A0) THEN 0 ELSE Sigma_m * (1.0 + C0 * c) * (a - A0)	!Representation of the Heaviside function
 			POINT LOAD(f) = 0
-		LINE TO(1)
+	LINE TO(1)
         !Condintions at the media, x=1
 			POINT LOAD(a)=0
 			POINT LOAD(c)=0
@@ -95,10 +95,10 @@ histories
 !Plots for oxLDL concentration, chemoattractant concentration, cytokine concentration, total intimal macrophage content, total intimal foam cell content
 !"export file" commands save a png file of each plot with name "name" to the folder where the FlexPDE script is saved
 !Naming convention: x(0)=concentration of x species at x=0, int(x)=integral of x species (m or f), T=trained, L/H=low/highLDL, Sigmam_x= sigma m value 1-4
-	history(l) at (0) !export file "l(0)_ULSigmam_1"				!Modified LDL Endotheilal Boundary
-	history(a) at (0) !export file "a(0)_ULSigmam_1"			!Chemoattractants on Endothelial Boundary
-    history(c) at (0) !export file "c(0)_ULSigmam_1"			!ES Cytokines on Endothelial Boundary
+	history(l) at (0) !export file "l(0)_ULSigmam_1"	!Modified LDL Endotheilal Boundary
+	history(a) at (0) !export file "a(0)_ULSigmam_1"	!Chemoattractants on Endothelial Boundary
+    	history(c) at (0) !export file "c(0)_ULSigmam_1"	!ES Cytokines on Endothelial Boundary
 	history(integral(m)) !export file "int(m)_ULSigmam_1"	!Monocytes / Macrophages Intimal Total
-	history(integral(f)) !export file "int(f)_ULSigmam_1"		!Foam Cells Intimal Total
+	history(integral(f)) !export file "int(f)_ULSigmam_1"	!Foam Cells Intimal Total
 
 END
